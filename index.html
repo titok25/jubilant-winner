@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shortly Pro | Encurtador de Links com Cloaker</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --color-slate-50: #f8fafc;
+        --color-slate-100: #f1f5f9;
+        --color-slate-200: #e2e8f0;
+        --color-slate-300: #cbd5e1;
+        --color-slate-400: #94a3b8;
+        --color-slate-500: #64748b;
+        --color-slate-600: #475569;
+        --color-slate-700: #334155;
+        --color-slate-800: #1e293b;
+        --color-slate-900: #0f172a;
+        --color-slate-950: #020617;
+        --color-violet-400: #a78bfa;
+        --color-violet-500: #8b5cf6;
+        --color-cyan-100: #cffafe;
+        --color-cyan-400: #06b6d4;
+        --color-emerald-100: #d1fae5;
+        --color-emerald-400: #34d399;
+        --color-rose-100: #ffe4e6;
+        --color-rose-400: #f43f5e;
+        --color-white: #ffffff;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+        background-color: var(--color-slate-950);
+        color: var(--color-slate-100);
+        min-height: 100vh;
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      .bg-gradient {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: -1;
+      }
+
+      .bg-gradient::before {
+        content: "";
+        position: absolute;
+        top: -6rem;
+        left: -6rem;
+        width: 20rem;
+        height: 20rem;
+        border-radius: 50%;
+        background: rgba(124, 58, 237, 0.2);
+        filter: blur(120px);
+      }
+
+      .bg-gradient::after {
+        content: "";
+        position: absolute;
+        top: 33%;
+        right: -5rem;
+        width: 24rem;
+        height: 24rem;
+        border-radius: 50%;
+        background: rgba(6, 182, 212, 0.15);
+        filter: blur(120px);
+      }
+
+      .container {
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .flex {
+        display: flex;
+      }
+
+      .flex-col {
+        flex-direction: column;
+      }
+
+      .flex-wrap {
+        flex-wrap: wrap;
+      }
+
+      .items-center {
+        align-items: center;
+      }
+
+      .items-start {
+        align-items: flex-start;
+      }
+
+      .justify-center {
+        justify-content: center;
+      }
+
+      .justify-between {
+        justify-content: space-between;
+      }
+
+      .justify-end {
+        justify-content: flex-end;
+      }
+
+      .gap-2 {
+        gap: 0.5rem;
+      }
+
+      .gap-3 {
+        gap: 0.75rem;
+      }
+
+      .gap-4 {
+        gap: 1rem;
+      }
+
+      .gap-5 {
+        gap: 1.25rem;
+      }
+
+      .gap-6 {
+        gap: 1.5rem;
+      }
+
+      .gap-8 {
+        gap: 2rem;
+      }
+
+      .min-h-screen {
+        min-height: 100vh;
+      }
+
+      .w-full {
+        width: 100%;
+      }
+
+      .max-w-md {
+        max-width: 28rem;
+      }
+
+      .max-w-2xl {
+        max-width: 42rem;
+      }
+
+      .max-w-4xl {
+        max-width: 56rem;
+      }
+
+      .max-w-7xl {
+        max-width: 80rem;
+      }
+
+      .px-4 {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .px-5 {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+      }
+
+      .px-6 {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+
+      .px-8 {
+        padding-left: 2rem;
+        padding-right: 2rem;
+      }
+
+      .py-2 {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+
+      .py-3 {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+      }
+
+      .py-4 {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+      }
+
+      .py-5 {
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
+      }
+
+      .py-6 {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+      }
+
+      .py-8 {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+      }
+
+      .pt-6 {
+        padding-top: 1.5rem;
+      }
+
+      .pb-5 {
+        padding-bottom: 1.25rem;
+      }
+
+      .pb-6 {
+        padding-bottom: 1.5rem;
+      }
+
+      .mt-2 {
+        margin-top: 0.5rem;
+      }
+
+      .mt-3 {
+        margin-top: 0.75rem;
+      }
+
+      .mt-4 {
+        margin-top: 1rem;
+      }
+
+      .mt-5 {
+        margin-top: 1.25rem;
+      }
+
+      .mt-6 {
+        margin-top: 1.5rem;
+      }
+
+      .mb-2 {
+        margin-bottom: 0.5rem;
+      }
+
+      .mb-4 {
+        margin-bottom: 1rem;
+      }
+
+      .space-y-2 > * + * {
+        margin-top: 0.5rem;
+      }
+
+      .space-y-4 > * + * {
+        margin-top: 1rem;
+      }
+
+      .space-y-5 > * + * {
+        margin-top: 1.25rem;
+      }
+
+      .space-y-6 > * + * {
+        margin-top: 1.5rem;
+      }
+
+      .rounded-xl {
+        border-radius: 0.75rem;
+      }
+
+      .rounded-2xl {
+        border-radius: 1rem;
+      }
+
+      .rounded-\[30px\] {
+        border-radius: 30px;
+      }
+
+      .rounded-full {
+        border-radius: 9999px;
+      }
+
+      .border {
+        border: 1px solid;
+      }
+
+      .border-white\/10 {
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .border-white\/20 {
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .border-violet-400\/20 {
+        border-color: rgba(167, 139, 250, 0.2);
+      }
+
+      .border-cyan-400\/20 {
+        border-color: rgba(6, 182, 212, 0.2);
+      }
+
+      .border-emerald-400\/20 {
+        border-color: rgba(52, 211, 153, 0.2);
+      }
+
+      .border-rose-400\/20 {
+        border-color: rgba(244, 63, 94, 0.2);
+      }
+
+      .bg-white\/5 {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+
+      .bg-white\/10 {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .bg-slate-900 {
+        background-color: var(--color-slate-900);
+      }
+
+      .bg-slate-950 {
+        background-color: var(--color-slate-950);
+      }
+
+      .bg-slate-950\/50 {
+        background-color: rgba(2, 6, 23, 0.5);
+      }
+
+      .bg-slate-900\/70 {
+        background-color: rgba(15, 23, 42, 0.7);
+      }
+
+      .bg-violet-500 {
+        background-color: var(--color-violet-500);
+      }
+
+      .bg-violet-500\/10 {
+        background-color: rgba(139, 92, 246, 0.1);
+      }
+
+      .bg-violet-400\/10 {
+        background-color: rgba(167, 139, 250, 0.1);
+      }
+
+      .bg-cyan-400\/10 {
+        background-color: rgba(6, 182, 212, 0.1);
+      }
+
+      .bg-emerald-400\/10 {
+        background-color: rgba(52, 211, 153, 0.1);
+      }
+
+      .bg-rose-400\/10 {
+        background-color: rgba(244, 63, 94, 0.1);
+      }
+
+      .text-white {
+        color: var(--color-white);
+      }
+
+      .text-slate-100 {
+        color: var(--color-slate-100);
+      }
+
+      .text-slate-200 {
+        color: var(--color-slate-200);
+      }
+
+      .text-slate-300 {
+        color: var(--color-slate-300);
+      }
+
+      .text-slate-400 {
+        color: var(--color-slate-400);
+      }
+
+      .text-violet-100 {
+        color: rgba(237, 233, 254, 1);
+      }
+
+      .text-violet-200 {
+        color: rgba(229, 224, 252, 1);
+      }
+
+      .text-violet-300 {
+        color: rgba(196, 181, 253, 1);
+      }
+
+      .text-cyan-100 {
+        color: var(--color-cyan-100);
+      }
+
+      .text-emerald-100 {
+        color: var(--color-emerald-100);
+      }
+
+      .text-rose-100 {
+        color: var(--color-rose-100);
+      }
+
+      .text-xs {
+        font-size: 0.75rem;
+      }
+
+      .text-sm {
+        font-size: 0.875rem;
+      }
+
+      .text-base {
+        font-size: 1rem;
+      }
+
+      .text-lg {
+        font-size: 1.125rem;
+      }
+
+      .text-xl {
+        font-size: 1.25rem;
+      }
+
+      .text-2xl {
+        font-size: 1.5rem;
+      }
+
+      .text-3xl {
+        font-size: 1.875rem;
+      }
+
+      .text-5xl {
+        font-size: 3rem;
+      }
+
+      .font-medium {
+        font-weight: 500;
+      }
+
+      .font-semibold {
+        font-weight: 600;
+      }
+
+      .font-bold {
+        font-weight: 700;
+      }
+
+      .font-extrabold {
+        font-weight: 800;
+      }
+
+      .uppercase {
+        text-transform: uppercase;
+      }
+
+      .tracking-\[0\.22em\] {
+        letter-spacing: 0.22em;
+      }
+
+      .tracking-\[0\.24em\] {
+        letter-spacing: 0.24em;
+      }
+
+      .tracking-\[0\.18em\] {
+        letter-spacing: 0.18em;
+      }
+
+      .tracking-tight {
+        letter-spacing: -0.02em;
+      }
+
+      .break-all {
+        word-break: break-all;
+      }
+
+      .inline-flex {
+        display: inline-flex;
+      }
+
+      .grid {
+        display: grid;
+      }
+
+      .grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .overflow-hidden {
+        overflow: hidden;
+      }
+
+      .overflow-x-auto {
+        overflow-x: auto;
+      }
+
+      .divide-y {
+        border-bottom: 1px solid;
+      }
+
+      .divide-y > * + * {
+        border-top: 1px solid;
+      }
+
+      .divide-white\/10 > * + * {
+        border-top-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .divide-white\/5 > * + * {
+        border-top-color: rgba(255, 255, 255, 0.05);
+      }
+
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .table thead {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+
+      .table th {
+        padding: 1rem 1.25rem;
+        text-align: left;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: var(--color-slate-400);
+      }
+
+      .table td {
+        padding: 1rem 1.25rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .table tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        transition: background-color 0.2s;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        background-color: rgba(15, 23, 42, 0.7);
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        color: var(--color-white);
+        outline: none;
+        transition: all 0.2s;
+      }
+
+      input::placeholder,
+      select::placeholder,
+      textarea::placeholder {
+        color: var(--color-slate-500);
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--color-violet-400);
+        box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
+      }
+
+      input:disabled {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: var(--color-slate-300);
+        cursor: not-allowed;
+      }
+
+      button {
+        padding: 0.75rem 1rem;
+        border: none;
+        border-radius: 1rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-transform: none;
+      }
+
+      button:hover {
+        opacity: 0.9;
+      }
+
+      button:active {
+        transform: scale(0.98);
+      }
+
+      .btn-primary {
+        background-color: var(--color-violet-500);
+        color: var(--color-white);
+      }
+
+      .btn-primary:hover {
+        background-color: var(--color-violet-400);
+      }
+
+      .btn-secondary {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background-color: rgba(255, 255, 255, 0.05);
+        color: var(--color-slate-200);
+      }
+
+      .btn-secondary:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .btn-danger {
+        border: 1px solid rgba(244, 63, 94, 0.2);
+        background-color: rgba(244, 63, 94, 0.1);
+        color: var(--color-rose-100);
+      }
+
+      .btn-danger:hover {
+        background-color: rgba(244, 63, 94, 0.2);
+      }
+
+      .btn-success {
+        border: 1px solid rgba(52, 211, 153, 0.2);
+        background-color: rgba(52, 211, 153, 0.1);
+        color: var(--color-emerald-100);
+      }
+
+      .btn-success:hover {
+        background-color: rgba(52, 211, 153, 0.2);
+      }
+
+      .card {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        background-color: rgba(255, 255, 255, 0.05);
+        padding: 2rem;
+        box-shadow: 0 24px 80px rgba(15, 23, 42, 0.24);
+        backdrop-filter: blur(10px);
+      }
+
+      dialog {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        background-color: var(--color-slate-950);
+        color: var(--color-white);
+        box-shadow: 0 24px 80px rgba(15, 23, 42, 0.24);
+        padding: 0;
+        max-width: 56rem;
+        width: 100%;
+      }
+
+      dialog::backdrop {
+        background-color: rgba(2, 6, 23, 0.8);
+      }
+
+      @media (max-width: 768px) {
+        .text-5xl {
+          font-size: 1.875rem;
+        }
+
+        .text-3xl {
+          font-size: 1.5rem;
+        }
+
+        .text-2xl {
+          font-size: 1.25rem;
+        }
+
+        .grid-cols-2 {
+          grid-template-columns: 1fr;
+        }
+
+        .divide-y {
+          border-bottom: none;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .divide-y > * + * {
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+      }
+    </style>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%238b5cf6'>S</text></svg>" />
+  </head>
+  <body>
+    <div class="bg-gradient"></div>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="flex min-h-screen items-center justify-center px-4 py-8">
+      <div class="card max-w-md">
+        <div class="mb-8 text-center">
+          <span class="inline-flex items-center rounded-full border border-violet-400/30 bg-violet-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-violet-200">
+            Shortly Pro
+          </span>
+          <h1 class="mt-5 text-3xl font-extrabold text-white">Acesso administrativo</h1>
+          <p class="mt-3 text-sm text-slate-400">Faça login para gerenciar seus links encurtados</p>
+        </div>
+
+        <form id="loginForm" class="space-y-5">
+          <div>
+            <label for="loginUsername" class="mb-2 block text-sm font-medium text-slate-200">Usuário</label>
+            <input id="loginUsername" name="username" type="text" required placeholder="admin" />
+          </div>
+
+          <div>
+            <label for="loginPassword" class="mb-2 block text-sm font-medium text-slate-200">Senha</label>
+            <input id="loginPassword" name="password" type="password" required placeholder="••••••••" />
+          </div>
+
+          <button type="submit" class="btn-primary w-full">Entrar</button>
+        </form>
+
+        <div id="loginFeedback" class="mt-5 hidden rounded-2xl border px-4 py-3 text-sm"></div>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <main id="dashboardPage" class="hidden">
+      <div class="container flex min-h-screen flex-col gap-8 py-8">
+        <section class="flex flex-col gap-6 lg:flex-row">
+          <div class="card flex-1">
+            <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+              <div class="max-w-3xl">
+                <span class="inline-flex items-center rounded-full border border-violet-400/30 bg-violet-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-violet-200">
+                  Elegant and Perfect Style
+                </span>
+                <h1 class="mt-5 text-3xl font-extrabold tracking-tight text-white lg:text-5xl">
+                  Encurtador com Cloaker Inteligente
+                </h1>
+                <p class="mt-5 max-w-2xl text-sm leading-7 text-slate-300 lg:text-base">
+                  Crie links curtos com cloaker automático: redirecione para URLs diferentes em desktop, mobile, Instagram e Facebook com um único link encurtado.
+                </p>
+              </div>
+
+              <div class="grid min-w-[240px] gap-3 rounded-[28px] border border-white/10 bg-slate-900/70 p-5">
+                <div>
+                  <p class="text-xs uppercase tracking-[0.22em] text-slate-400">URL base</p>
+                  <p id="baseUrl" class="mt-2 break-all text-sm font-semibold text-white"></p>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <article class="rounded-2xl bg-white/5 p-4">
+                    <p class="text-xs uppercase tracking-[0.16em] text-slate-400">Links</p>
+                    <p id="statsLinks" class="mt-2 text-3xl font-bold text-white">0</p>
+                  </article>
+                  <article class="rounded-2xl bg-white/5 p-4">
+                    <p class="text-xs uppercase tracking-[0.16em] text-slate-400">Cliques</p>
+                    <p id="statsClicks" class="mt-2 text-3xl font-bold text-white">0</p>
+                  </article>
+                </div>
+                <button id="logoutButton" class="btn-danger">Sair</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="flex flex-col items-start justify-between gap-4 border-b border-white/10 pb-5 lg:flex-row lg:items-center">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Novo link</p>
+              <h2 class="mt-2 text-2xl font-bold text-white">Criar encurtador</h2>
+            </div>
+            <div class="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-3 py-2 text-xs font-semibold text-cyan-100">
+              Cloaker ativo
+            </div>
+          </div>
+
+          <form id="createForm" class="mt-6 space-y-5">
+            <div>
+              <label for="targetUrl" class="mb-2 block text-sm font-medium text-slate-200">URL de destino padrão</label>
+              <input id="targetUrl" name="targetUrl" type="url" required placeholder="https://seudominio.com/oferta" />
+            </div>
+
+            <div class="grid gap-5 lg:grid-cols-2">
+              <div>
+                <label for="slug" class="mb-2 block text-sm font-medium text-slate-200">Slug personalizado</label>
+                <input id="slug" name="slug" type="text" minlength="3" maxlength="63" required placeholder="meu-produto-01" />
+                <p class="mt-2 text-xs text-slate-400">Use letras minúsculas, números e hífens.</p>
+              </div>
+
+              <div>
+                <label for="redirectType" class="mb-2 block text-sm font-medium text-slate-200">Tipo de redirecionamento</label>
+                <select id="redirectType" name="redirectType">
+                  <option value="301">301 · Permanente</option>
+                  <option value="302">302 · Temporário</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary w-full">Criar link curto</button>
+          </form>
+
+          <div id="feedback" class="mt-5 hidden rounded-2xl border px-4 py-3 text-sm"></div>
+        </section>
+
+        <section class="card">
+          <div class="flex flex-col gap-4 border-b border-white/10 pb-5 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">Dashboard</p>
+              <h2 class="mt-2 text-2xl font-bold text-white">Links criados</h2>
+              <p class="mt-2 text-sm text-slate-400">Gerencie slugs, destinos, cloaker e rastreamento em um único painel.</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <input id="searchInput" type="text" placeholder="Buscar por slug ou URL..." style="max-width: 250px" />
+              <button id="exportButton" class="btn-success">Exportar CSV</button>
+              <button id="refreshButton" class="btn-secondary">Atualizar</button>
+            </div>
+          </div>
+
+          <div class="mt-6 overflow-hidden rounded-[28px] border border-white/10 bg-slate-950/50">
+            <div class="overflow-x-auto">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Slug</th>
+                    <th>Destino</th>
+                    <th>Cloaker</th>
+                    <th>Cliques</th>
+                    <th>Atualizado</th>
+                    <th style="text-align: right">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="linksTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <dialog id="editModal">
+      <form method="dialog" class="flex items-center justify-between border-b border-white/10 px-6 py-5">
+        <div>
+          <p class="text-xs uppercase tracking-[0.24em] text-slate-400">Editar link</p>
+          <h3 class="mt-2 text-xl font-bold">Atualizar destino e configurar cloaker</h3>
+        </div>
+        <button class="rounded-xl border border-white/10 px-3 py-2 text-sm text-slate-300">Fechar</button>
+      </form>
+      <div class="px-6 py-6">
+        <form id="editForm" class="space-y-6">
+          <input id="editId" type="hidden" />
+
+          <div class="border-b border-white/10 pb-6">
+            <h4 class="mb-4 text-sm font-semibold text-white">Configuração básica</h4>
+            <div class="space-y-5">
+              <div>
+                <label for="editSlug" class="mb-2 block text-sm font-medium text-slate-200">Slug</label>
+                <input id="editSlug" type="text" disabled />
+              </div>
+              <div>
+                <label for="editTargetUrl" class="mb-2 block text-sm font-medium text-slate-200">URL de destino padrão</label>
+                <input id="editTargetUrl" type="url" required />
+              </div>
+              <div>
+                <label for="editRedirectType" class="mb-2 block text-sm font-medium text-slate-200">Tipo de redirecionamento</label>
+                <select id="editRedirectType">
+                  <option value="301">301 · Permanente</option>
+                  <option value="302">302 · Temporário</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="mb-4 flex items-center justify-between">
+              <h4 class="text-sm font-semibold text-white">Cloaker inteligente (opcional)</h4>
+              <label class="flex items-center gap-2">
+                <input id="enableCloaker" type="checkbox" style="width: auto; cursor: pointer" />
+                <span class="text-xs text-slate-300">Ativar cloaker</span>
+              </label>
+            </div>
+            <div id="cloakerFields" class="hidden space-y-4 rounded-2xl border border-white/10 bg-slate-900/50 p-4">
+              <p class="text-xs text-slate-400">Configure URLs diferentes para cada dispositivo/navegador. Deixe em branco para usar a URL padrão.</p>
+              <div class="grid gap-4 lg:grid-cols-2">
+                <div>
+                  <label for="cloakerDesktop" class="mb-2 block text-sm font-medium text-slate-200">Desktop</label>
+                  <input id="cloakerDesktop" type="url" placeholder="https://..." />
+                </div>
+                <div>
+                  <label for="cloakerMobile" class="mb-2 block text-sm font-medium text-slate-200">Mobile</label>
+                  <input id="cloakerMobile" type="url" placeholder="https://..." />
+                </div>
+                <div>
+                  <label for="cloakerInstagram" class="mb-2 block text-sm font-medium text-slate-200">Instagram Mobile</label>
+                  <input id="cloakerInstagram" type="url" placeholder="https://..." />
+                </div>
+                <div>
+                  <label for="cloakerFacebook" class="mb-2 block text-sm font-medium text-slate-200">Facebook Mobile</label>
+                  <input id="cloakerFacebook" type="url" placeholder="https://..." />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col-reverse gap-3 border-t border-white/10 pt-6 lg:flex-row lg:justify-end">
+            <button type="button" id="cancelModalButton" class="btn-secondary">Cancelar</button>
+            <button type="submit" class="btn-primary">Salvar alterações</button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+
+    <script>
+      const state = { links: [], authenticated: false };
+
+      const elements = {
+        loginPage: document.getElementById("loginPage"),
+        dashboardPage: document.getElementById("dashboardPage"),
+        loginForm: document.getElementById("loginForm"),
+        loginFeedback: document.getElementById("loginFeedback"),
+        baseUrl: document.getElementById("baseUrl"),
+        createForm: document.getElementById("createForm"),
+        feedback: document.getElementById("feedback"),
+        linksTable: document.getElementById("linksTable"),
+        statsLinks: document.getElementById("statsLinks"),
+        statsClicks: document.getElementById("statsClicks"),
+        searchInput: document.getElementById("searchInput"),
+        exportButton: document.getElementById("exportButton"),
+        refreshButton: document.getElementById("refreshButton"),
+        logoutButton: document.getElementById("logoutButton"),
+        editModal: document.getElementById("editModal"),
+        editForm: document.getElementById("editForm"),
+        editId: document.getElementById("editId"),
+        editSlug: document.getElementById("editSlug"),
+        editTargetUrl: document.getElementById("editTargetUrl"),
+        editRedirectType: document.getElementById("editRedirectType"),
+        cancelModalButton: document.getElementById("cancelModalButton"),
+        enableCloaker: document.getElementById("enableCloaker"),
+        cloakerFields: document.getElementById("cloakerFields"),
+        cloakerDesktop: document.getElementById("cloakerDesktop"),
+        cloakerMobile: document.getElementById("cloakerMobile"),
+        cloakerInstagram: document.getElementById("cloakerInstagram"),
+        cloakerFacebook: document.getElementById("cloakerFacebook"),
+      };
+
+      elements.baseUrl.textContent = window.location.origin;
+
+      function showFeedback(element, message, type = "success") {
+        element.className = `rounded-2xl border px-4 py-3 text-sm ${
+          type === "error"
+            ? "border-rose-400/30 bg-rose-400/10 text-rose-100"
+            : "border-emerald-400/30 bg-emerald-400/10 text-emerald-100"
+        }`;
+        element.textContent = message;
+        element.classList.remove("hidden");
+      }
+
+      function hideFeedback(element) {
+        element.classList.add("hidden");
+      }
+
+      function showPage(page) {
+        elements.loginPage.classList.toggle("hidden", page !== "login");
+        elements.dashboardPage.classList.toggle("hidden", page !== "dashboard");
+      }
+
+      function formatDate(value) {
+        if (!value) return "—";
+        const parsed = new Date(value.includes("T") ? value : value.replace(" ", "T") + "Z");
+        return Number.isNaN(parsed.getTime()) ? value : parsed.toLocaleString("pt-BR");
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      async function checkAuth() {
+        const response = await fetch("/api/auth/status");
+        const data = await response.json().catch(() => ({ authenticated: false }));
+        state.authenticated = data.authenticated;
+        showPage(state.authenticated ? "dashboard" : "login");
+        if (state.authenticated) {
+          await loadLinks();
+        }
+      }
+
+      async function loadLinks() {
+        const response = await fetch("/api/links");
+        if (!response.ok) {
+          if (response.status === 401) {
+            state.authenticated = false;
+            showPage("login");
+            return;
+          }
+          throw new Error("Não foi possível carregar os links.");
+        }
+        const data = await response.json();
+        state.links = data.links || [];
+        renderTable();
+        updateStats();
+      }
+
+      function updateStats() {
+        elements.statsLinks.textContent = String(state.links.length);
+        elements.statsClicks.textContent = String(
+          state.links.reduce((sum, item) => sum + Number(item.clicks || 0), 0),
+        );
+      }
+
+      function renderTable() {
+        const searchTerm = elements.searchInput.value.toLowerCase();
+        const filtered = state.links.filter(
+          link => link.slug.toLowerCase().includes(searchTerm) || link.targetUrl.toLowerCase().includes(searchTerm),
+        );
+
+        if (!filtered.length) {
+          elements.linksTable.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align: center; padding: 3rem 1.25rem; color: var(--color-slate-400);">
+                ${state.links.length === 0 ? "Nenhum link cadastrado ainda." : "Nenhum resultado encontrado."}
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        elements.linksTable.innerHTML = filtered
+          .map(
+            (link) => `
+              <tr>
+                <td>
+                  <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <span style="display: inline-flex; border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.1); background-color: rgba(255, 255, 255, 0.05); padding: 0.25rem 0.75rem; font-size: 0.75rem; font-weight: 600; color: var(--color-slate-100); width: fit-content;">/${escapeHtml(link.slug)}</span>
+                    <a href="${escapeHtml(link.shortUrl)}" target="_blank" rel="noopener noreferrer" style="color: var(--color-violet-300); text-decoration: none; word-break: break-all; font-weight: 500; font-size: 0.875rem;">
+                      ${escapeHtml(link.shortUrl)}
+                    </a>
+                  </div>
+                </td>
+                <td style="color: var(--color-slate-300); font-size: 0.875rem; max-width: 300px; word-break: break-all;">${escapeHtml(link.targetUrl)}</td>
+                <td>
+                  <span style="display: inline-flex; border-radius: 9999px; border: 1px solid rgba(6, 182, 212, 0.2); background-color: rgba(6, 182, 212, 0.1); padding: 0.25rem 0.75rem; font-size: 0.75rem; font-weight: 600; color: var(--color-cyan-100);">
+                    Disponível
+                  </span>
+                </td>
+                <td style="color: var(--color-white); font-weight: 600;">${escapeHtml(String(link.clicks || 0))}</td>
+                <td style="color: var(--color-slate-400); font-size: 0.875rem;">${escapeHtml(formatDate(link.updatedAt))}</td>
+                <td style="text-align: right;">
+                  <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem;">
+                    <button data-action="copy" data-id="${link.id}" class="btn-secondary" style="padding: 0.5rem 0.75rem; font-size: 0.75rem;">Copiar</button>
+                    <button data-action="edit" data-id="${link.id}" style="border: 1px solid rgba(167, 139, 250, 0.2); background-color: rgba(139, 92, 246, 0.1); color: var(--color-violet-100); padding: 0.5rem 0.75rem; font-size: 0.75rem; border-radius: 1rem; cursor: pointer; transition: all 0.2s;">Editar</button>
+                    <button data-action="delete" data-id="${link.id}" class="btn-danger" style="padding: 0.5rem 0.75rem; font-size: 0.75rem;">Excluir</button>
+                  </div>
+                </td>
+              </tr>
+            `,
+          )
+          .join("");
+      }
+
+      async function openEditModal(linkId) {
+        const link = state.links.find((item) => Number(item.id) === Number(linkId));
+        if (!link) return;
+
+        elements.editId.value = String(link.id);
+        elements.editSlug.value = `/${link.slug}`;
+        elements.editTargetUrl.value = link.targetUrl;
+        elements.editRedirectType.value = String(link.redirectType);
+
+        const cloakerResponse = await fetch(`/api/links/${linkId}/cloaker`);
+        const cloakerData = await cloakerResponse.json().catch(() => ({ cloaker: null }));
+        const cloaker = cloakerData.cloaker;
+
+        if (cloaker) {
+          elements.enableCloaker.checked = true;
+          elements.cloakerFields.classList.remove("hidden");
+          elements.cloakerDesktop.value = cloaker.desktop_url || "";
+          elements.cloakerMobile.value = cloaker.mobile_url || "";
+          elements.cloakerInstagram.value = cloaker.instagram_url || "";
+          elements.cloakerFacebook.value = cloaker.facebook_url || "";
+        } else {
+          elements.enableCloaker.checked = false;
+          elements.cloakerFields.classList.add("hidden");
+          elements.cloakerDesktop.value = "";
+          elements.cloakerMobile.value = "";
+          elements.cloakerInstagram.value = "";
+          elements.cloakerFacebook.value = "";
+        }
+
+        elements.editModal.showModal();
+      }
+
+      function closeEditModal() {
+        elements.editModal.close();
+        elements.editForm.reset();
+      }
+
+      async function login(event) {
+        event.preventDefault();
+        hideFeedback(elements.loginFeedback);
+
+        const formData = new FormData(elements.loginForm);
+        const username = String(formData.get("username") || "").trim();
+        const password = String(formData.get("password") || "").trim();
+
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          showFeedback(elements.loginFeedback, data.error || "Erro ao fazer login.", "error");
+          return;
+        }
+
+        state.authenticated = true;
+        elements.loginForm.reset();
+        showPage("dashboard");
+        await loadLinks();
+      }
+
+      async function logout() {
+        const response = await fetch("/api/auth/logout", { method: "POST" });
+        if (response.ok) {
+          state.authenticated = false;
+          showPage("login");
+        }
+      }
+
+      async function createLink(event) {
+        event.preventDefault();
+        hideFeedback(elements.feedback);
+
+        const formData = new FormData(elements.createForm);
+        const payload = {
+          targetUrl: String(formData.get("targetUrl") || "").trim(),
+          slug: String(formData.get("slug") || "").trim().toLowerCase(),
+          redirectType: Number(formData.get("redirectType") || 301),
+        };
+
+        const response = await fetch("/api/links", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          showFeedback(elements.feedback, data.error || "Não foi possível criar o link.", "error");
+          return;
+        }
+
+        elements.createForm.reset();
+        document.getElementById("redirectType").value = "301";
+        showFeedback(elements.feedback, "Link criado com sucesso.");
+        await loadLinks();
+      }
+
+      async function saveEdit(event) {
+        event.preventDefault();
+
+        const id = elements.editId.value;
+        const payload = {
+          targetUrl: elements.editTargetUrl.value.trim(),
+          redirectType: Number(elements.editRedirectType.value || 301),
+        };
+
+        const response = await fetch(`/api/links/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          showFeedback(elements.feedback, data.error || "Não foi possível salvar as alterações.", "error");
+          return;
+        }
+
+        if (elements.enableCloaker.checked) {
+          const cloakerPayload = {
+            desktopUrl: elements.cloakerDesktop.value.trim() || null,
+            mobileUrl: elements.cloakerMobile.value.trim() || null,
+            instagramUrl: elements.cloakerInstagram.value.trim() || null,
+            facebookUrl: elements.cloakerFacebook.value.trim() || null,
+          };
+
+          const cloakerResponse = await fetch(`/api/links/${id}/cloaker`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(cloakerPayload),
+          });
+
+          if (!cloakerResponse.ok) {
+            showFeedback(elements.feedback, "Erro ao salvar cloaker.", "error");
+            return;
+          }
+        } else {
+          await fetch(`/api/links/${id}/cloaker`, { method: "DELETE" }).catch(() => {});
+        }
+
+        closeEditModal();
+        showFeedback(elements.feedback, "Link atualizado com sucesso.");
+        await loadLinks();
+      }
+
+      async function deleteLink(id) {
+        const confirmed = window.confirm("Deseja realmente excluir este link? Esta ação não poderá ser desfeita.");
+        if (!confirmed) return;
+
+        const response = await fetch(`/api/links/${id}`, { method: "DELETE" });
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+          showFeedback(elements.feedback, data.error || "Não foi possível excluir o link.", "error");
+          return;
+        }
+
+        showFeedback(elements.feedback, "Link removido com sucesso.");
+        await loadLinks();
+      }
+
+      async function copyShortUrl(id) {
+        const link = state.links.find((item) => Number(item.id) === Number(id));
+        if (!link) return;
+        await navigator.clipboard.writeText(link.shortUrl);
+        showFeedback(elements.feedback, "Link curto copiado para a área de transferência.");
+      }
+
+      async function exportCSV() {
+        const response = await fetch("/api/links/export/csv");
+        if (!response.ok) {
+          showFeedback(elements.feedback, "Erro ao exportar relatório.", "error");
+          return;
+        }
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `links-${new Date().toISOString().split("T")[0]}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }
+
+      elements.loginForm.addEventListener("submit", (event) => {
+        login(event).catch((error) => showFeedback(elements.loginFeedback, error.message || "Erro ao fazer login.", "error"));
+      });
+
+      elements.createForm.addEventListener("submit", (event) => {
+        createLink(event).catch((error) => showFeedback(elements.feedback, error.message || "Erro ao criar o link.", "error"));
+      });
+
+      elements.editForm.addEventListener("submit", (event) => {
+        saveEdit(event).catch((error) => showFeedback(elements.feedback, error.message || "Erro ao editar o link.", "error"));
+      });
+
+      elements.enableCloaker.addEventListener("change", () => {
+        elements.cloakerFields.classList.toggle("hidden", !elements.enableCloaker.checked);
+      });
+
+      elements.cancelModalButton.addEventListener("click", closeEditModal);
+      elements.logoutButton.addEventListener("click", logout);
+      elements.refreshButton.addEventListener("click", () => {
+        hideFeedback(elements.feedback);
+        loadLinks().catch((error) => showFeedback(elements.feedback, error.message || "Erro ao atualizar a lista.", "error"));
+      });
+      elements.exportButton.addEventListener("click", () => {
+        exportCSV().catch((error) => showFeedback(elements.feedback, error.message || "Erro ao exportar.", "error"));
+      });
+      elements.searchInput.addEventListener("input", renderTable);
+
+      elements.linksTable.addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+
+        const action = button.dataset.action;
+        const id = Number(button.dataset.id);
+
+        if (action === "edit") {
+          openEditModal(id);
+          return;
+        }
+
+        if (action === "delete") {
+          deleteLink(id).catch((error) => showFeedback(elements.feedback, error.message || "Erro ao excluir o link.", "error"));
+          return;
+        }
+
+        if (action === "copy") {
+          copyShortUrl(id).catch((error) => showFeedback(elements.feedback, error.message || "Erro ao copiar o link.", "error"));
+        }
+      });
+
+      checkAuth();
+    </script>
+  </body>
+</html>
